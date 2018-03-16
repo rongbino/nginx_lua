@@ -1,10 +1,13 @@
 #!/bin/sh
 
-apt-get install -y libreadline-dev libncurses5-dev libpcre3-dev \
-    libssl-dev perl make build-essential
- 
+#ubuntu 
+#apt-get install -y libreadline-dev libncurses5-dev libpcre3-dev libssl-dev perl make build-essential
+
+# CentOS
+yum install -y libreadline-dev libncurses5-dev libpcre3-dev libssl-dev perl make build-essential
+
 # Script to compile nginx on ubuntu with lua support.
- 
+
 NGX_VERSION='1.8.0'
 LUAJIT_VERSION='2.0.4'
 LUAJIT_MAJOR_VERSION='2.0'
@@ -17,49 +20,48 @@ ACCESS_LOG_PATH='/var/log/nginx/access.log'
 NGINX_USER='www-data'
 NGINX_GROUP='www-data'
 
- 
 # Download
 if [ ! -f ./nginx-${NGX_VERSION}.tar.gz ]; then
     wget http://nginx.org/download/nginx-${NGX_VERSION}.tar.gz
 fi
- 
+
 if [ ! -f ./LuaJIT-${LUAJIT_VERSION}.tar.gz ]; then
     wget http://luajit.org/download/LuaJIT-${LUAJIT_VERSION}.tar.gz
 fi
- 
+
 if [ ! -f ./ngx_devel_kit-${NGX_DEVEL_KIT_VERSION}.tar.gz ]; then
     wget https://github.com/simpl/ngx_devel_kit/archive/v${NGX_DEVEL_KIT_VERSION}.tar.gz \
         -O ngx_devel_kit-${NGX_DEVEL_KIT_VERSION}.tar.gz
 fi
- 
+
 if [ ! -f ./lua-nginx-module-${LUA_NGINX_MODULE_VERSION}.tar.gz ]; then
     wget https://github.com/openresty/lua-nginx-module/archive/v${LUA_NGINX_MODULE_VERSION}.tar.gz \
         -O lua-nginx-module-${LUA_NGINX_MODULE_VERSION}.tar.gz
 fi
- 
+
 # Extract
 if [ ! -d ./nginx-${NGX_VERSION} ]; then
     tar xvf nginx-${NGX_VERSION}.tar.gz
 fi
- 
+
 if [ ! -d ./LuaJIT-${LUAJIT_VERSION} ]; then
     tar xvf LuaJIT-${LUAJIT_VERSION}.tar.gz
 fi
- 
+
 if [ ! -d ./ngx_devel_kit-${NGX_DEVEL_KIT_VERSION} ]; then
     tar xvf ngx_devel_kit-${NGX_DEVEL_KIT_VERSION}.tar.gz
 fi
- 
+
 if [ ! -d ./lua-nginx-module-${LUA_NGINX_MODULE_VERSION} ]; then
     tar xvf lua-nginx-module-${LUA_NGINX_MODULE_VERSION}.tar.gz
 fi
 
 # Install luajit
 cd ./LuaJIT-${LUAJIT_VERSION} && sudo make install && cd ..
- 
+
 NGX_DEVEL_KIT_PATH=$(pwd)/ngx_devel_kit-${NGX_DEVEL_KIT_VERSION}
 LUA_NGINX_MODULE_PATH=$(pwd)/lua-nginx-module-${LUA_NGINX_MODULE_VERSION}
- 
+
 # Compile And Install Nginx
 cd ./nginx-${NGX_VERSION} && \
     LUAJIT_LIB=/usr/local/lib/lua LUAJIT_INC=/usr/local/include/luajit-${LUAJIT_MAJOR_VERSION} \
