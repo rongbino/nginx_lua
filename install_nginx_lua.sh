@@ -77,6 +77,7 @@ cd ./nginx-${NGX_VERSION} && \
     --with-pcre-jit \
     --add-module=${NGX_DEVEL_KIT_PATH} \
     --add-module=${LUA_NGINX_MODULE_PATH} \
+    --enable-fpm \
     && make -j8 && sudo make install
 
 
